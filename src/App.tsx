@@ -25,6 +25,7 @@ export default function App() {
   // у браузера есть время (заполнение оплаты + processing + success + рулетка)
   // чтобы полностью скачать видео, пока пользователь смотрит на другие экраны.
   const preloadVideoRef = useRef<HTMLVideoElement>(null);
+  const preloadedMellstroyIdRef = useRef<number | null>(null);
 
   // Предзагрузка всех 3 базовых картинок и фона сразу при открытии сайта
   useEffect(() => {
@@ -69,13 +70,15 @@ export default function App() {
     setStep('form');
   };
 
-  // Как только у нас есть выбранный targetMellstroy и пользователь ушёл
-  // с экрана формы — явно дёргаем load() на скрытом видео-элементе,
-  // чтобы браузер начал закачку файла в фоне как можно раньше.
+  // Грузим видео ровно один раз на каждого нового мельстроя,
+  // а не при каждом переходе между экранами (form → roulette → result).
   useEffect(() => {
     if (step === 'form') return;
+    if (preloadedMellstroyIdRef.current === targetMellstroy.id) return;
+
     const video = preloadVideoRef.current;
     if (video) {
+      preloadedMellstroyIdRef.current = targetMellstroy.id;
       video.load();
     }
   }, [targetMellstroy, step]);
