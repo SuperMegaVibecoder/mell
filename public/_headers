@@ -1,0 +1,17 @@
+# Cloudflare Workers Static Assets reads this file from the build output root.
+# Vite copies everything from /public as-is, so this file must live at /public/_headers
+# in the repo — then it lands at dist/_headers after `npm run build`.
+#
+# Without this, Cloudflare Workers serves static assets with
+# "Cache-Control: public, max-age=0, must-revalidate" by default, forcing the
+# browser to revalidate every single request (even for the same file requested
+# 60 times by the roulette cards), which causes visible request queueing.
+
+/pics/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/videos/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
