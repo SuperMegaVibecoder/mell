@@ -31,9 +31,7 @@ export default function App() {
   useEffect(() => {
     const imagesToPreload = [
       getAssetUrl('pics/gold.jpg'),
-      getAssetUrl('pics/red.jpg'),
       getAssetUrl('pics/blue.jpg'),
-      getAssetUrl('pics/bg.jpg'),
     ];
     imagesToPreload.forEach((src) => {
       const img = new Image();

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Sparkles, Volume2, VolumeX, Flame } from 'lucide-react';
+import React from 'react';
+import { Sparkles, RotateCcw, Volume2, VolumeX } from 'lucide-react';
 import { soundManager } from '../utils/audio';
 
 interface HeaderProps {
@@ -7,68 +7,57 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ onReset }) => {
-  const [isMuted, setIsMuted] = useState(soundManager.getMuted());
+  const [isMuted, setIsMuted] = React.useState(soundManager.getMuted());
 
-  const handleToggleSound = () => {
-    const nextMuted = soundManager.toggleMute();
-    setIsMuted(nextMuted);
-    if (!nextMuted) {
-      soundManager.playClick();
-    }
+  const handleToggleMute = () => {
+    const muted = soundManager.toggleMute();
+    setIsMuted(muted);
   };
 
   return (
-    <header
-      id="main-header"
-      className="sticky top-0 z-40 w-full backdrop-blur-xl bg-slate-950/80 border-b border-slate-800/80 transition-all duration-300"
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-        {/* Brand / Logo */}
+    <header className="relative z-20 w-full max-w-5xl mx-auto px-4 py-4 sm:py-6 flex items-center justify-between">
+      <button
+        onClick={() => {
+          soundManager.playClick();
+          onReset();
+        }}
+        className="flex items-center gap-2 group text-left focus:outline-none"
+      >
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 p-0.5 shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
+          <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+            <Sparkles className="w-5 h-5 text-amber-400" />
+          </div>
+        </div>
+        <div>
+          <div className="text-base sm:text-lg font-black tracking-tight text-white group-hover:text-amber-300 transition-colors">
+            MELLSTROY <span className="text-amber-400 font-normal">CALENDAR</span>
+          </div>
+          <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
+            Гороскоп судьбы
+          </div>
+        </div>
+      </button>
+
+      <div className="flex items-center gap-2 sm:gap-3">
         <button
-          id="logo-button"
+          onClick={handleToggleMute}
+          className="p-2.5 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 transition-all shadow-md focus:outline-none"
+          title={isMuted ? 'Включить звук' : 'Выключить звук'}
+          aria-label={isMuted ? 'Включить звук' : 'Выключить звук'}
+        >
+          {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
+        </button>
+
+        <button
           onClick={() => {
             soundManager.playClick();
             onReset();
           }}
-          className="flex items-center gap-3 group text-left cursor-pointer transition-transform active:scale-95"
+          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs sm:text-sm font-semibold transition-all shadow-md focus:outline-none"
         >
-          <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 p-[2px] shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/40 transition-shadow">
-            <div className="w-full h-full bg-slate-950 rounded-[14px] flex items-center justify-center">
-              <Flame className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
-            </div>
-          </div>
-          <div>
-            <span className="text-base sm:text-lg font-black tracking-tight text-white flex items-center gap-1.5">
-              КАКОЙ ТЫ МЕЛЛСТРОЙ?
-              <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
-            </span>
-            <p className="text-[11px] font-medium text-slate-400 hidden sm:block">
-              Шуточный астрологический мем-сервис
-            </p>
-          </div>
+          <RotateCcw className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Сначала</span>
         </button>
-
-        {/* Right Action: Sound Toggle */}
-        <div className="flex items-center gap-3">
-          <button
-            id="sound-toggle-button"
-            onClick={handleToggleSound}
-            aria-label={isMuted ? 'Включить звук' : 'Выключить звук'}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition-all text-xs font-semibold cursor-pointer active:scale-95"
-          >
-            {isMuted ? (
-              <>
-                <VolumeX className="w-4 h-4 text-rose-400" />
-                <span className="hidden sm:inline text-slate-400">Звук: выкл</span>
-              </>
-            ) : (
-              <>
-                <Volume2 className="w-4 h-4 text-amber-400" />
-                <span className="hidden sm:inline text-slate-300">Звук: вкл</span>
-              </>
-            )}
-          </button>
-        </div>
       </div>
     </header>
   );

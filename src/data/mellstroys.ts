@@ -2,8 +2,8 @@ import { Mellstroy } from '../types';
 import { getAssetUrl } from '../utils/assets';
 
 const goldImg = getAssetUrl('pics/gold.jpg');
-const redImg = getAssetUrl('pics/red.jpg');
 const blueImg = getAssetUrl('pics/blue.jpg');
+const redImg = getAssetUrl('pics/gold.jpg');
 
 export const MELLSTROYS: Mellstroy[] = [
   {

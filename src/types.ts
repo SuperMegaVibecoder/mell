@@ -1,4 +1,6 @@
-export type RarityType = 'Обычный' | 'Редкий' | 'Эпический' | 'Легендарный' | 'Мифический';
+export type AppStep = 'form' | 'roulette' | 'result';
+
+export type MellstroyRarity = 'Обычный' | 'Редкий' | 'Эпический' | 'Легендарный' | 'Мифический';
 
 export interface Mellstroy {
   id: number;
@@ -6,10 +8,10 @@ export interface Mellstroy {
   name: string;
   shortTitle: string;
   image: string;
-  video?: string;
+  video: string;
   description: string;
   quote: string;
-  rarity: RarityType;
+  rarity: MellstroyRarity;
   hype: number;
   energy: number;
   luck: number;
@@ -17,5 +19,3 @@ export interface Mellstroy {
   gradient: string;
   badge: string;
 }
-
-export type AppStep = 'form' | 'payment' | 'processing' | 'success' | 'roulette' | 'result';
