@@ -4,10 +4,11 @@ import { Mellstroy } from '../types';
 interface RouletteCardProps {
   mellstroy: Mellstroy;
   isHighlighted?: boolean;
+  playVideo?: boolean;
 }
 
 export const RouletteCard: React.FC<RouletteCardProps> = React.memo(
-  ({ mellstroy, isHighlighted = false }) => {
+  ({ mellstroy, isHighlighted = false, playVideo = false }) => {
     return (
       <div
         className={`relative w-44 sm:w-52 h-64 sm:h-72 shrink-0 rounded-2xl p-2.5 transition-all duration-300 select-none overflow-hidden ${
@@ -21,23 +22,34 @@ export const RouletteCard: React.FC<RouletteCardProps> = React.memo(
         )}
 
         <div className="relative w-full h-36 sm:h-44 rounded-xl overflow-hidden bg-slate-900/80 border border-slate-800/80 mb-2.5 select-none pointer-events-none flex items-center justify-center">
-          <img
-            src={mellstroy.image}
-            alt={mellstroy.name}
-            loading="eager"
-            decoding="async"
-            className="w-full h-full object-cover object-center"
-            onError={(e) => {
-              const target = e.currentTarget;
-              if (!target.dataset.retried) {
-                target.dataset.retried = '1';
-                // Try alternate path if relative failed
-                target.src = target.src.includes('./')
-                  ? target.src.replace('./', '/')
-                  : `./${mellstroy.image.replace(/^\//, '')}`;
-              }
-            }}
-          />
+          {playVideo && mellstroy.video ? (
+            <video
+              src={mellstroy.video}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover object-center"
+            />
+          ) : (
+            <img
+              src={mellstroy.image}
+              alt={mellstroy.name}
+              loading="lazy"
+              decoding="async"
+              className="w-full h-full object-cover object-center"
+              onError={(e) => {
+                const target = e.currentTarget;
+                if (!target.dataset.retried) {
+                  target.dataset.retried = '1';
+                  // Try alternate path if relative failed
+                  target.src = target.src.includes('./')
+                    ? target.src.replace('./', '/')
+                    : `./${mellstroy.image.replace(/^\//, '')}`;
+                }
+              }}
+            />
+          )}
         </div>
 
         <div className="text-center px-1">

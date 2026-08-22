@@ -143,6 +143,7 @@ export const Roulette: React.FC<RouletteProps> = ({ targetMellstroy, onFinished 
                   key={`${card.id}-${idx}`}
                   mellstroy={card}
                   isHighlighted={hasStopped && isTarget}
+                  playVideo={hasStopped && isTarget}
                 />
               );
             })}
